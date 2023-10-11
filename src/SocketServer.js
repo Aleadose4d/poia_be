@@ -1,5 +1,6 @@
 let onlineUsers = [];
 export default function (socket, io) {
+<<<<<<< HEAD
   //user joins or opens the application
   socket.on("join", (user) => {
     socket.join(user);
@@ -12,6 +13,21 @@ export default function (socket, io) {
     //send socket id
     io.emit("setup socket", socket.id);
   });
+=======
+    //user joins or opens the application
+    socket.on("join", (user) => {
+        console.log("user has joined : ", user);
+        socket.join(user);
+        //add joined user to online users
+        if(!onlineUsers.some((u) =>u.userId===user)){
+            onlineUsers.push({userId: user, socketId: socket.id});
+        }
+        //send online users to frontend
+        io.emit("get-online-users", onlineUsers);
+        //send socket id
+        io.emit("setup socket", socket._id);
+    });
+>>>>>>> 47d96b882d4fc10b21160352bdbcb157d8762321
 
   //socket disconnect
   socket.on("disconnect", () => {
@@ -59,8 +75,41 @@ export default function (socket, io) {
     io.to(data.to).emit("call accepted", data.signal);
   });
 
+<<<<<<< HEAD
   //---end call
   socket.on("end call", (id) => {
     io.to(id).emit("end call");
   });
 }
+=======
+    //typing
+    socket.on("typing", (conversation)=> {
+        socket.in(conversation).emit("typing", conversation);
+    });
+    socket.on("stop typing", (conversation)=> {
+        socket.in(conversation).emit("stop typing");
+    });
+
+    //call
+    //---call user
+    socket.on("call user",(data)=>{
+        let userId = data.userToCall;
+        let userSocketId = onlineUsers.find((user) => user.userId == userId);
+        io.to(userSocketId.socketId).emit("call user", {
+            signal: data.signal,
+            from: data.from,
+            name: data.name,
+            picture: data.picture,
+        });
+    });
+    //---answer call
+    socket.on("answer call", (data) => {
+        io.to(data.to).emit("call accepted", data.signal);
+    });
+
+    //---end call
+    socket.on("end call", (id) => {
+        io.to(id).emit("end call");
+    });
+}
+>>>>>>> 47d96b882d4fc10b21160352bdbcb157d8762321
