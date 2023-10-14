@@ -95,4 +95,8 @@ export const updateLatestMessage = async (convo_id, msg) => {
     throw createHttpError.BadRequest("Oops...Something went wrong !");
 
   return updatedConvo;
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> f440f48a3ba2ee988c193c7738084f498ac617a8

@@ -118,4 +118,8 @@ export const refreshToken = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> f440f48a3ba2ee988c193c7738084f498ac617a8

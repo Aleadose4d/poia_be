@@ -86,4 +86,8 @@ export const signUser = async (email, password) => {
   if (!passwordMatches) throw createHttpError.NotFound("Invalid credentials.");
 
   return user;
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> f440f48a3ba2ee988c193c7738084f498ac617a8
