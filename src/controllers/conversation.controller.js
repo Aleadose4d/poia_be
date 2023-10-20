@@ -12,7 +12,11 @@ export const create_open_conversation = async (req, res, next) => {
   try {
     const sender_id = req.user.userId;
     const { receiver_id, isGroup } = req.body;
+<<<<<<< HEAD
     if (isGroup === false) {
+=======
+    if (isGroup == false) {
+>>>>>>> 8664761b40bd62b36dcef7017fd10c7aca2ed595
       //check if receiver_id is provided
       if (!receiver_id) {
         logger.error(
@@ -28,13 +32,41 @@ export const create_open_conversation = async (req, res, next) => {
       );
       if (existed_conversation) {
         res.json(existed_conversation);
+<<<<<<< HEAD
       } else {
         // let receiver_user = await findUser(receiver_id);
         let convoData = {
+=======
+<<<<<<< HEAD
+      } else {
+        // let receiver_user = await findUser(receiver_id);
+        let convoData = {
+=======
+<<<<<<< HEAD
+    }else {
+        //let receiver_user = await findUser(receiver_id);
+        let convoData = {
+            name: "conversation name",
+            picture: "conversation picture",
+            isGroup: false,
+            users: [sender_id, receiver_id],
+=======
+      } else {
+        // let receiver_user = await findUser(receiver_id);
+        let convoData = {
+>>>>>>> f440f48a3ba2ee988c193c7738084f498ac617a8
+>>>>>>> 8664761b40bd62b36dcef7017fd10c7aca2ed595
           name: "conversation name",
           picture: "conversation picture",
           isGroup: false,
           users: [sender_id, receiver_id],
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 305e09d8f9fb2b28804d6cb0a0ebfd490a1b1590
+>>>>>>> f440f48a3ba2ee988c193c7738084f498ac617a8
+>>>>>>> 8664761b40bd62b36dcef7017fd10c7aca2ed595
         };
         const newConvo = await createConversation(convoData);
         const populatedConvo = await populateConversation(
@@ -99,4 +131,12 @@ export const createGroup = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+<<<<<<< HEAD
 };
+=======
+<<<<<<< HEAD
+};
+=======
+};
+>>>>>>> f440f48a3ba2ee988c193c7738084f498ac617a8
+>>>>>>> 8664761b40bd62b36dcef7017fd10c7aca2ed595
