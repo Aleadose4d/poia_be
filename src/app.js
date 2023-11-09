@@ -48,6 +48,7 @@ app.use(
 
 //cors
 app.use(cors());
+app.options('*', cors());
 
 //api v1 routes
 app.use("/api/v1", routes);
