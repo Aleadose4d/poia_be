@@ -1,6 +1,27 @@
 import createHttpError from "http-errors";
 import { ConversationModel, UserModel } from "../models/index.js";
 
+function encryptConversationsData(encryptedValue,key){
+  //encryptMessageData=atob (encryptedValue);
+  let encryptedValueData="";
+  for(let i=0;i<encryptedValue.length;i++){
+      encryptedValueData+=String.fromCharCode(encryptedValue.charCodeAt(i)^key.charCodeAt(i%key.length));
+    }
+    //console.log(encryptedValueData);
+    return btoa(encryptedValueData);
+    //console.log("Hello world");
+};
+
+function decryptConversationsData(encryptedValue,key){
+  encryptedValue=atob(encryptedValue);
+  let decryptValueData="";
+  for(let i=0;i<encryptedValue.length;i++){
+    decryptValueData+=String.fromCharCode(encryptedValue.charCodeAt(i)^key.charCodeAt(i%key.length));
+  }
+  return decryptValueData;
+};
+
+
 export const doesConversationExist = async (
   sender_id,
   receiver_id,
@@ -84,6 +105,20 @@ export const getUserConversations = async (user_id) => {
     .catch((err) => {
       throw createHttpError.BadRequest("Oops...Something went wrong !");
     });
+
+    let Message100="Buenos dias";
+  let Key100="Akaza";
+  let encryptionKey="wpLCVzicowZVGnFh";
+  let decryptionKey="wpLCVzicowZVGnFh";//cambiarle esta nada mas
+  let conversationsString=conversations.toString();
+  let encryptedConversations=encryptConversationsData(conversationsString,encryptionKey);
+  let resultString = decryptConversationsData(encryptedConversations, decryptionKey);
+ 
+      if(conversationsString<resultString||resultString<conversationsString){
+        return null;
+  }
+  console.log("////// String resultante: ");
+  console.log(resultString);
   return conversations;
 };
 
