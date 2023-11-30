@@ -7,18 +7,18 @@ import SocketServer from "./SocketServer.js";
 const { DATABASE_URL } = process.env;
 const PORT = process.env.PORT || 8000;
 
-//exit on mognodb error
+//Error de salida en mognodb
 mongoose.connection.on("error", (err) => {
   logger.error(`Mongodb connection error : ${err}`);
   process.exit(1);
 });
 
-//mongodb debug mode
+//Modo de depuración de MongoDB
 if (process.env.NODE_ENV !== "production") {
   mongoose.set("debug", true);
 }
 
-//mongodb connection
+//Conexión MongoDB
 mongoose
   .connect(DATABASE_URL, {
     useNewUrlParser: true,
@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
   SocketServer(socket, io);
 });
 
-//handle server errors
+//Controlar los errores del servidor
 const exitHandler = () => {
   if (server) {
     logger.info("Server closed.");

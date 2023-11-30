@@ -13,14 +13,14 @@ export const create_open_conversation = async (req, res, next) => {
     const sender_id = req.user.userId;
     const { receiver_id, isGroup } = req.body;
     if (isGroup == false) {
-      //check if receiver_id is provided
+      //Compruebe si se proporciona receiver_id
       if (!receiver_id) {
         logger.error(
           "please provide the user id you wanna start a conversation with !"
         );
         throw createHttpError.BadGateway("Oops...Something went wrong !");
       }
-      //check if chat exists
+      //Comprueba si existe el chat
       const existed_conversation = await doesConversationExist(
         sender_id,
         receiver_id,
@@ -46,8 +46,8 @@ export const create_open_conversation = async (req, res, next) => {
       }
     } else {
       console.log("hnaaaaaaaaaa");
-      //it's a group chat
-      //check if group chat exists
+      //Es un chat grupal
+      //Comprueba si existe el chat grupal
       const existed_group_conversation = await doesConversationExist(
         sender_id,
         receiver_id,
@@ -71,7 +71,7 @@ export const getConversations = async (req, res, next) => {
 };
 export const createGroup = async (req, res, next) => {
   const { name, users } = req.body;
-  //add current user to users
+  //Agregar usuario actual a usuarios
   users.push(req.user.userId);
   if (!name || !users) {
     throw createHttpError.BadRequest("Please fill all fields.");

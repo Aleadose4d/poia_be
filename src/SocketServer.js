@@ -1,30 +1,30 @@
 let onlineUsers = [];
 export default function (socket, io) {
-  //user joins or opens the application
+  //El usuario se une a la aplicación o la abre
   socket.on("join", (user) => {
     socket.join(user);
-    //add joined user to online users
+    //Agregar usuario unido a usuarios en línea
     if (!onlineUsers.some((u) => u.userId === user)) {
       onlineUsers.push({ userId: user, socketId: socket.id });
     }
-    //send online users to frontend
+    //Enviar usuarios en línea a la interfaz
     io.emit("get-online-users", onlineUsers);
-    //send socket id
+    //Enviar ID de socket
     io.emit("setup socket", socket.id);
   });
 
-  //socket disconnect
+  //Desconexión del socket
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
     io.emit("get-online-users", onlineUsers);
   });
 
-  //join a conversation room
+  //Unirse a una sala de conversación
   socket.on("join conversation", (conversation) => {
     socket.join(conversation);
   });
 
-  //send and receive message
+  //Enviar y recibir mensajes
   socket.on("send message", (message) => {
     let conversation = message.conversation;
     if (!conversation.users) return;
@@ -34,7 +34,7 @@ export default function (socket, io) {
     });
   });
 
-  //typing
+  //Escribiendo
   socket.on("typing", (conversation) => {
     socket.in(conversation).emit("typing", conversation);
   });
@@ -42,8 +42,8 @@ export default function (socket, io) {
     socket.in(conversation).emit("stop typing");
   });
 
-  //call
-  //---call user
+  //llamar
+  //---llamar usuario
   socket.on("call user", (data) => {
     let userId = data.userToCall;
     let userSocketId = onlineUsers.find((user) => user.userId == userId);
@@ -54,12 +54,12 @@ export default function (socket, io) {
       picture: data.picture,
     });
   });
-  //---answer call
+  //---Responder llamada
   socket.on("answer call", (data) => {
     io.to(data.to).emit("call accepted", data.signal);
   });
 
-  //---end call
+  //--- fin de llamada
   socket.on("end call", (id) => {
     io.to(id).emit("end call");
   });

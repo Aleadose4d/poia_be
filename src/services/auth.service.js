@@ -9,12 +9,12 @@ const { DEFAULT_PICTURE, DEFAULT_STATUS } = process.env;
 export const createUser = async (userData) => {
   const { name, email, picture, status, password } = userData;
 
-  //check if fields are empty
+  //Compruebe si los campos están vacíos
   if (!name || !email || !password) {
     throw createHttpError.BadRequest("Please fill all fields.");
   }
 
-  //check name length
+  //Comprobar la longitud del nombre
   if (
     !validator.isLength(name, {
       min: 2,
@@ -26,21 +26,21 @@ export const createUser = async (userData) => {
     );
   }
 
-  //Check status length
+  //Comprobar la longitud del estado
   if (status && status.length > 64) {
     throw createHttpError.BadRequest(
       "Please make sure your status is less than 64 characters."
     );
   }
 
-  //check if email address is valid
+  //Compruebe si la dirección de correo electrónico es válida
   if (!validator.isEmail(email)) {
     throw createHttpError.BadRequest(
       "Please make sure to provide a valid email address."
     );
   }
 
-  //check if user already exist
+  //Compruebe si el usuario ya existe
   const checkDb = await UserModel.findOne({ email });
   if (checkDb) {
     throw createHttpError.Conflict(
@@ -48,7 +48,7 @@ export const createUser = async (userData) => {
     );
   }
 
-  //check password length
+  //Comprobar la longitud de la contraseña
   if (
     !validator.isLength(password, {
       min: 6,
@@ -60,9 +60,9 @@ export const createUser = async (userData) => {
     );
   }
 
-  //hash password--->to be done in the user model
+  //hash password--->a realizar en el modelo de usuario
 
-  //adding user to databse
+  //Adición de un usuario a DataBSE
   const user = await new UserModel({
     name,
     email,
@@ -77,10 +77,10 @@ export const createUser = async (userData) => {
 export const signUser = async (email, password) => {
   const user = await UserModel.findOne({ email: email.toLowerCase() }).lean();
 
-  //check if user exist
+  //Compruebe si el usuario existe
   if (!user) throw createHttpError.NotFound("Invalid credentials.");
 
-  //compare passwords
+  //Comparar contraseñas
   let passwordMatches = await bcrypt.compare(password, user.password);
 
   if (!passwordMatches) throw createHttpError.NotFound("Invalid credentials.");
